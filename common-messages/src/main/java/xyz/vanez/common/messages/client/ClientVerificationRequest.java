@@ -1,4 +1,4 @@
-package xyz.vanez.client.dto;
+package xyz.vanez.common.messages.client;
 
 import lombok.Data;
 

@@ -1,0 +1,13 @@
+package xyz.vanez.orchestrator.state;
+
+public enum BookingEvent {
+    START_PROCESS,
+    CLIENT_VERIFIED,
+    CLIENT_VERIFICATION_FAILED,
+    BOOKING_CREATED,
+    BOOKING_CREATION_FAILED,
+    PAYMENT_PROCESSED,
+    PAYMENT_PROCESSING_FAILED,
+    COMPLETED,
+    FAILED
+}

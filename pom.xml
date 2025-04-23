@@ -21,6 +21,7 @@
         <module>booking-service</module>
         <module>client-service</module>
         <module>payment-service</module>
+        <module>common-messages</module>
     </modules>
 
     <parent>

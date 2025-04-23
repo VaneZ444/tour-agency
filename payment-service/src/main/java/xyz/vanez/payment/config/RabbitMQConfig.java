@@ -1,0 +1,28 @@
+package xyz.vanez.payment.config;
+
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableRabbit
+public class RabbitMQConfig {
+
+    @Bean
+    public DirectExchange servicesExchange() {
+        return new DirectExchange("services.exchange");
+    }
+
+    @Bean
+    public Queue paymentProcessQueue() {
+        return new Queue("payment.process.queue", true);
+    }
+
+    @Bean
+    public Binding paymentProcessBinding() {
+        return BindingBuilder.bind(paymentProcessQueue())
+                .to(servicesExchange())
+                .with("payment.process");
+    }
+}
