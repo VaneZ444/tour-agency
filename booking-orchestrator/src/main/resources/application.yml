@@ -6,7 +6,7 @@ spring:
     password: your-lavinmq-password
     virtual-host: ixejxqrs
     template:
-      exchange: services.exchange
+      exchange: orchestrator.exchange
     listener:
       simple:
         prefetch: 1

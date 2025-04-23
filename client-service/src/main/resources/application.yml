@@ -3,10 +3,10 @@ spring:
     host: dog.lmq.cloudamqp.com
     port: 5672
     username: ixejxqrs
-    password: your-lavinmq-password
+    password: 4o3ZuEAjWhAvl0RyoRnRxkcJTSddIECD
     virtual-host: ixejxqrs
     template:
-      exchange: services.exchange
+      exchange: client.exchange
     listener:
       simple:
         prefetch: 1
