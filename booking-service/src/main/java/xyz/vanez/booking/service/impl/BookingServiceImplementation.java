@@ -22,7 +22,7 @@ public class BookingServiceImplementation implements BookingService {
 
     @Override
     public void createBooking(BookingRequest request) {
-        Booking booking = new Booking(request.bookingId(), request.clientId(), request.tourId(), request.bookingDate());
+        Booking booking = new Booking(request.getBookingId(), request.getClientId(), request.getTourId(), request.getBookingDate());
         bookingRepository.put(booking.getBookingId(), booking);
 
         BookingCreatedEvent event = new BookingCreatedEvent(booking.getBookingId(), true);

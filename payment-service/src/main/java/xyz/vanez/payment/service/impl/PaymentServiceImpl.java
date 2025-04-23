@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
         // Логика обработки платежа
         boolean isSuccess = true; // Заглушка
 
-        PaymentProcessedEvent event = new PaymentProcessedEvent(request.bookingId(), isSuccess);
+        PaymentProcessedEvent event = new PaymentProcessedEvent(request.getBookingId(), isSuccess);
         rabbitTemplate.convertAndSend("orchestrator.exchange", "payment.processed", event);
     }
 }

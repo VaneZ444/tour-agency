@@ -24,10 +24,7 @@ public class ClientVerificationListener {
         log.info("Received verification request for client: {}", request.getClientId());
         boolean isVerified = clientService.verifyClient(request.getClientId());
 
-        ClientVerificationResponse response = new ClientVerificationResponse();
-        response.setRequestId(request.getRequestId());
-        response.setClientId(request.getClientId());
-        response.setValid(isVerified);
+        ClientVerificationResponse response = new ClientVerificationResponse(request.getRequestId(),isVerified, request.getClientId());
 
         rabbitTemplate.convertAndSend(
                 "orchestrator.exchange",

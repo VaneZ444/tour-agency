@@ -23,13 +23,13 @@ public class OrchestrationService {
     }
 
     public void startBookingProcess(BookingRequest request) {
-        stateMachine.startProcess(request.bookingId());
+        stateMachine.startProcess(request.getBookingId());
 
         // Отправляем запрос на проверку клиента
         rabbitTemplate.convertAndSend(
                 "services.exchange",
                 "client.verify",
-                new ClientVerificationRequest(request.clientId(), request.bookingId())
+                new ClientVerificationRequest(request.getClientId(), request.getBookingId())
         );
     }
 
@@ -40,7 +40,7 @@ public class OrchestrationService {
         rabbitTemplate.convertAndSend(
                 "services.exchange",
                 "booking.create",
-                new BookingRequest(response.clientId(), response.clientId(), "TOUR-123", null)
+                new BookingRequest(response.getClientId(), response.getClientId(), "TOUR-123", null)
         );
     }
 
@@ -56,7 +56,7 @@ public class OrchestrationService {
         rabbitTemplate.convertAndSend(
                 "services.exchange",
                 "payment.process",
-                new PaymentRequest(event.bookingId(), "CARD-123")
+                new PaymentRequest(event.getBookingId(), "CARD-123")
         );
     }
 

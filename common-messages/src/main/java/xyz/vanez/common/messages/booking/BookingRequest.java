@@ -1,10 +1,16 @@
 package xyz.vanez.common.messages.booking;
 
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
 
-public record BookingRequest(
-        String bookingId,
-        String clientId,
-        String tourId,
-        LocalDate bookingDate
-) {}
+import java.time.LocalDate;
+@Getter
+@AllArgsConstructor
+@Data
+public class BookingRequest {
+    private String bookingId;
+    private String clientId;
+    private String tourId;
+    private LocalDate bookingDate;
+}

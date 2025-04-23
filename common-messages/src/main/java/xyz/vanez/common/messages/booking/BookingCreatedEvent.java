@@ -1,6 +1,13 @@
 package xyz.vanez.common.messages.booking;
 
-public record BookingCreatedEvent(
-        String bookingId,
-        boolean isSuccess
-) {}
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+@Data
+public class BookingCreatedEvent {
+    private String bookingId;
+    private boolean isSuccess;
+}

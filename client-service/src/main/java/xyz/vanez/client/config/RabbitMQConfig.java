@@ -13,57 +13,32 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitMQConfig {
 
-    // 1. Обменники (Exchanges)
     @Bean
-    public DirectExchange clientExchange() {
-        return new DirectExchange("client.exchange");
+    public DirectExchange servicesExchange() {
+        return new DirectExchange("services.exchange");
     }
 
     @Bean
-    public DirectExchange orchestratorExchange() {
-        return new DirectExchange("orchestrator.exchange");
-    }
-
-    // 2. Очереди (Queues)
-    @Bean
-    public Queue clientVerificationQueue() {
-        return new Queue("client.verify.queue", true); // durable=true
+    public Queue clientVerifyQueue() {
+        return new Queue("client.verify.queue", true);
     }
 
     @Bean
-    public Queue clientVerifiedResponseQueue() {
-        return new Queue("orchestrator.client.verified.queue", true);
-    }
-
-    // 3. Привязки (Bindings)
-    @Bean
-    public Binding verificationBinding() {
-        return BindingBuilder.bind(clientVerificationQueue())
-                .to(clientExchange())
+    public Binding clientVerifyBinding() {
+        return BindingBuilder.bind(clientVerifyQueue())
+                .to(servicesExchange())
                 .with("client.verify");
     }
 
-    @Bean
-    public Binding verifiedResponseBinding() {
-        return BindingBuilder.bind(clientVerifiedResponseQueue())
-                .to(orchestratorExchange())
-                .with("client.verified");
-    }
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(jsonMessageConverter());
-        return template;
+    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
     }
-    /*
-     * Схема взаимодействия:
-     *
-     * Booking Orchestrator --(client.verify)--> client.exchange --> client.verify.queue (Client Service)
-     * Client Service --(client.verified)--> orchestrator.exchange --> orchestrator.client.verified.queue (Orchestrator)
-     */
 }

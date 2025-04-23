@@ -1,6 +1,13 @@
 package xyz.vanez.common.messages.payment;
 
-public record PaymentRequest(
-        String bookingId,
-        String cardId
-) {}
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+
+@Data
+@Getter
+@AllArgsConstructor
+public class PaymentRequest {
+    String bookingId;
+    String cardId;
+}

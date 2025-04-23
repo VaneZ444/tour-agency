@@ -1,9 +1,14 @@
+server:
+  port: 8080
+
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   rabbitmq:
     host: dog.lmq.cloudamqp.com
     port: 5672
     username: ixejxqrs
-    password: your-lavinmq-password
+    password: 4o3ZuEAjWhAvl0RyoRnRxkcJTSddIECD
     virtual-host: ixejxqrs
     template:
       exchange: orchestrator.exchange
@@ -18,6 +23,6 @@ spring:
           max-attempts: 3
           max-interval: 10000ms
           multiplier: 2.0
-    logging:
-      level:
-        org.springframework.amqp: DEBUG
+  logging:
+    level:
+      org.springframework.amqp: DEBUG
