@@ -26,7 +26,7 @@ public class OrchestrationService {
     }
 
     public void startBookingProcess(BookingRequest request) {
-        log.info("Starting booking process for booking: {}", request.getBookingId());
+        log.info("Starting booking process for booking: {}, client: {}", request.getBookingId(), request.getClientId());
         stateMachine.startProcess(request.getBookingId());
 
         // Отправляем запрос на проверку клиента
@@ -38,15 +38,21 @@ public class OrchestrationService {
     }
 
     public void processClientVerified(ClientVerificationResponse response) {
-        log.info("Processing client verification response for booking: {}", response.getClientId());
+        log.info("Processing client verification response for booking: {}", response.getRequestId());
         stateMachine.sendEvent(BookingEvent.CLIENT_VERIFIED);
 
-        // Логика создания бронирования
+        // Исправленный запрос на бронирование
         rabbitTemplate.convertAndSend(
                 "services.exchange",
                 "booking.create",
-                new BookingRequest(response.getClientId(), response.getClientId(), "TOUR-123", null)
+                new BookingRequest(
+                        response.getRequestId(),   // BOOK-101
+                        response.getClientId(),    // CLT-123
+                        "TOUR-123",
+                        null
+                )
         );
+        log.info("Sent booking creation request for booking: {}", response.getRequestId());
     }
 
     public void handleVerificationFailed(ClientVerificationResponse response) {

@@ -16,7 +16,7 @@ public class ClientController {
     public ClientController(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
-
+    /*
     @RabbitListener(queues = "client.verify.queue")
     public void verifyClient(ClientVerificationRequest request) {
         log.info("Received verification request for client: {}", request.getClientId());
@@ -28,4 +28,5 @@ public class ClientController {
         rabbitTemplate.convertAndSend("client.verification.response.queue", response);
         log.info("Sent verification response for client: {}", request.getClientId());
     }
+     */
 }

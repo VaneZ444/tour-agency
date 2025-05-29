@@ -25,11 +25,21 @@ public class BookingServiceImplementation implements BookingService {
 
     @Override
     public void createBooking(BookingRequest request) {
-        Booking booking = new Booking(request.getBookingId(), request.getClientId(), request.getTourId(), request.getBookingDate());
-        bookingRepository.put(booking.getBookingId(), booking);
+        log.info("Creating booking: {}", request.getBookingId());
 
+        Booking booking = new Booking(
+                request.getBookingId(),
+                request.getClientId(),
+                request.getTourId(),
+                request.getBookingDate()
+        );
+
+        bookingRepository.put(booking.getBookingId(), booking);
+        log.info("Booking created: {}", booking);
+
+        // Отправляем событие в оркестратор
         BookingCreatedEvent event = new BookingCreatedEvent(booking.getBookingId(), true);
         rabbitTemplate.convertAndSend("orchestrator.exchange", "booking.created", event);
-        log.info("Booking created successfully for booking: {}", request.getBookingId());
+        log.info("Sent booking created event: {}", event);
     }
 }
