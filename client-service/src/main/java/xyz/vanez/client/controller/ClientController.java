@@ -22,8 +22,9 @@ public class ClientController {
         log.info("Received verification request for client: {}", request.getClientId());
         // Логика проверки клиента
         boolean isValid = true; // Заглушка
+        String requestId = request.getRequestId(); // Заглушка
 
-        ClientVerificationResponse response = new ClientVerificationResponse(request.getRequestId(), isValid, request.getClientId());
+        ClientVerificationResponse response = new ClientVerificationResponse(requestId, isValid, request.getClientId());
         rabbitTemplate.convertAndSend("client.verification.response.queue", response);
         log.info("Sent verification response for client: {}", request.getClientId());
     }

@@ -31,6 +31,18 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue clientVerificationResponseQueue() {
+        return new Queue("client.verification.response.queue", true);
+    }
+
+    @Bean
+    public Binding clientVerificationResponseBinding() {
+        return BindingBuilder.bind(clientVerificationResponseQueue())
+                .to(servicesExchange())
+                .with("client.verified");
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }

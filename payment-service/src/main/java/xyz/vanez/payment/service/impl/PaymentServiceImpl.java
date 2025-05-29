@@ -2,10 +2,12 @@ package xyz.vanez.payment.service.impl;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import xyz.vanez.common.messages.payment.PaymentProcessedEvent;
 import xyz.vanez.common.messages.payment.PaymentRequest;
 import xyz.vanez.payment.service.PaymentService;
 
+@Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
@@ -22,5 +24,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentProcessedEvent event = new PaymentProcessedEvent(request.getBookingId(), isSuccess);
         rabbitTemplate.convertAndSend("orchestrator.exchange", "payment.processed", event);
+        log.info("Payment processed successfully for booking: {}", request.getBookingId());
     }
 }

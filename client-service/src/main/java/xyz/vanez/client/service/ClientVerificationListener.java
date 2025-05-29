@@ -1,11 +1,12 @@
-package xyz.vanez.client.service;
+package xyz.vanez.client.listener;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import xyz.vanez.common.messages.client.ClientVerificationRequest;
 import xyz.vanez.common.messages.client.ClientVerificationResponse;
-import lombok.extern.slf4j.Slf4j;
+import xyz.vanez.client.service.ClientService;
 
 @Slf4j
 @Service
@@ -24,12 +25,8 @@ public class ClientVerificationListener {
         log.info("Received verification request for client: {}", request.getClientId());
         boolean isVerified = clientService.verifyClient(request.getClientId());
 
-        ClientVerificationResponse response = new ClientVerificationResponse(request.getRequestId(),isVerified, request.getClientId());
-
-        rabbitTemplate.convertAndSend(
-                "orchestrator.exchange",
-                "client.verified",
-                response
-        );
+        ClientVerificationResponse response = new ClientVerificationResponse(request.getRequestId(), isVerified, request.getClientId());
+        rabbitTemplate.convertAndSend("orchestrator.exchange", "client.verified", response);
+        log.info("Sent verification response for client: {}", request.getClientId());
     }
 }

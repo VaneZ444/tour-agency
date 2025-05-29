@@ -11,6 +11,9 @@ import xyz.vanez.common.messages.payment.PaymentRequest;
 import xyz.vanez.orchestrator.state.BookingEvent;
 import xyz.vanez.orchestrator.state.BookingStateMachine;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class OrchestrationService {
 
@@ -23,6 +26,7 @@ public class OrchestrationService {
     }
 
     public void startBookingProcess(BookingRequest request) {
+        log.info("Starting booking process for booking: {}", request.getBookingId());
         stateMachine.startProcess(request.getBookingId());
 
         // Отправляем запрос на проверку клиента
@@ -34,6 +38,7 @@ public class OrchestrationService {
     }
 
     public void processClientVerified(ClientVerificationResponse response) {
+        log.info("Processing client verification response for booking: {}", response.getClientId());
         stateMachine.sendEvent(BookingEvent.CLIENT_VERIFIED);
 
         // Логика создания бронирования
@@ -45,11 +50,13 @@ public class OrchestrationService {
     }
 
     public void handleVerificationFailed(ClientVerificationResponse response) {
+        log.error("Client verification failed for booking: {}", response.getClientId());
         stateMachine.sendEvent(BookingEvent.CLIENT_VERIFICATION_FAILED);
         // Логика обработки ошибки
     }
 
     public void processBookingCreated(BookingCreatedEvent event) {
+        log.info("Processing booking created event for booking: {}", event.getBookingId());
         stateMachine.sendEvent(BookingEvent.BOOKING_CREATED);
 
         // Логика обработки платежа
@@ -61,16 +68,19 @@ public class OrchestrationService {
     }
 
     public void handleBookingCreationFailed(BookingCreatedEvent event) {
+        log.error("Booking creation failed for booking: {}", event.getBookingId());
         stateMachine.sendEvent(BookingEvent.BOOKING_CREATION_FAILED);
         // Логика обработки ошибки
     }
 
     public void processPaymentProcessed(PaymentProcessedEvent event) {
+        log.info("Processing payment processed event for booking: {}", event.getBookingId());
         stateMachine.sendEvent(BookingEvent.PAYMENT_PROCESSED);
         // Логика завершения процесса
     }
 
     public void handlePaymentProcessingFailed(PaymentProcessedEvent event) {
+        log.error("Payment processing failed for booking: {}", event.getBookingId());
         stateMachine.sendEvent(BookingEvent.PAYMENT_PROCESSING_FAILED);
         // Логика обработки ошибки
     }

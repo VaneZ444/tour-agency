@@ -10,6 +10,9 @@ import xyz.vanez.booking.service.BookingService;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BookingServiceImplementation implements BookingService {
 
@@ -27,5 +30,6 @@ public class BookingServiceImplementation implements BookingService {
 
         BookingCreatedEvent event = new BookingCreatedEvent(booking.getBookingId(), true);
         rabbitTemplate.convertAndSend("orchestrator.exchange", "booking.created", event);
+        log.info("Booking created successfully for booking: {}", request.getBookingId());
     }
 }
